@@ -205,13 +205,15 @@ Wariga::~Wariga(){
 }
 
 /**
- * @brief Setter untuk wariga berdasarkan waktu.
+ * @brief Setter untuk wariga berdasarkan Pawukon dan Saptawara.
  *
- * Berfungsi untuk melakukan setup waktu dan juga keseluruhan wewaran berdasarkan waktu yang di-setup.
- * @param time dalam bentuk epoch timestamp.
+ * Berfungsi untuk melakukan setup waktu dan juga keseluruhan wewaran berdasarkan masukan Pawukon dan saptawara yang diberikan.
+ * @param wuku member pawukon.
+ * @param rahina member dari Saptawara.
+ * @return 0 jika sukses
  */
-int Wariga::setup(time_t time){
-  this->setTime(time);
+int Wariga::setup(Pawukon::PAWUKON_t wuku, Pawukon::RAHINA_t rahina){
+  this->setPawukonRahina(wuku, rahina);
   int timeInWuku = this->getPawukon() * 7 + this->getRahina();
   this->triWara.setId(timeInWuku % 3);
   this->triWara.setUrip(static_cast<unsigned int>(triWaraUrip[this->triWara.getId()]));
@@ -244,6 +246,17 @@ int Wariga::setup(time_t time){
   this->dwiWara.setUrip(static_cast<unsigned int>(dwiWaraUrip[this->dwiWara.getId()]));
   this->dwiWara.setName(dwiWaraLabel[this->dwiWara.getId()]);
   return 0;
+}
+
+/**
+ * @brief Setter untuk wariga berdasarkan waktu.
+ *
+ * Berfungsi untuk melakukan setup waktu dan juga keseluruhan wewaran berdasarkan waktu yang di-setup.
+ * @param time dalam bentuk epoch timestamp.
+ */
+int Wariga::setup(time_t time){
+  this->setTime(time);
+  return this->setup(this->getPawukon(), this->getRahina());
 }
 
 /**
