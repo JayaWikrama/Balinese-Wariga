@@ -117,9 +117,16 @@ Pawukon::~Pawukon(){
 void Pawukon::setTime(time_t currentTime){
   struct tm tmBalineseCalendarRef;
   memset(&tmBalineseCalendarRef, 0x00, sizeof(struct tm));
-  tmBalineseCalendarRef.tm_mday = 6;
-  tmBalineseCalendarRef.tm_mon = 4;
-  tmBalineseCalendarRef.tm_year = 0;
+  if (currentTime > 13042430){
+    tmBalineseCalendarRef.tm_mday = 28;
+    tmBalineseCalendarRef.tm_mon = 5;
+    tmBalineseCalendarRef.tm_year = 70;
+  }
+  else {
+    tmBalineseCalendarRef.tm_mday = 6;
+    tmBalineseCalendarRef.tm_mon = 4;
+    tmBalineseCalendarRef.tm_year = 0;
+  }
   tmBalineseCalendarRef.tm_hour = 0;
   tmBalineseCalendarRef.tm_min = 0;
   tmBalineseCalendarRef.tm_sec = 0;
