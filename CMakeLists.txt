@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.5.0)
 
 # Project configuration
 project(warigabali LANGUAGES CXX)
@@ -12,6 +12,12 @@ set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT
 # Include necessary modules
 include(FindPkgConfig)
 include(FetchContent)
+
+# Add debug option
+option(BUILD_DEBUG "Enable debuging" OFF)
+if(BUILD_DEBUG)
+  set(CMAKE_BUILD_TYPE Debug)
+endif()
 
 # Set the default build type to Release if not specified
 if(NOT CMAKE_BUILD_TYPE)
@@ -46,10 +52,17 @@ set(SOURCE_FILES
 # Create static library
 add_library(${PROJECT_NAME}-ar STATIC ${SOURCE_FILES})
 set_target_properties(${PROJECT_NAME}-ar PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+if(BUILD_DEBUG)
+  set_target_properties(${PROJECT_NAME}-ar PROPERTIES COMPILE_OPTIONS "-g" LINK_OPTIONS "-g")
+endif()
 
 # Create shared library from static library
 add_library(${PROJECT_NAME}-lib SHARED $<TARGET_OBJECTS:${PROJECT_NAME}-ar>)
 set_target_properties(${PROJECT_NAME}-lib PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+if(BUILD_DEBUG)
+  set_target_properties(${PROJECT_NAME}-lib PROPERTIES COMPILE_OPTIONS "-g" LINK_OPTIONS "-g")
+endif()
+
 
 # Create the executable
 add_executable(${PROJECT_NAME} examples/main.cpp)
